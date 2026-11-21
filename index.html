@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090a10">
+  <meta name="description" content="AI Council – flere AI-perspektiver samlet ét sted.">
+  <link rel="manifest" href="manifest.json">
+  <title>AI Council</title>
+  <style>
+    :root{--bg:#090a10;--panel:#11131d;--panel2:#171a27;--line:#272b3b;--text:#f4f5fb;--muted:#969bb0;--purple:#9a83ff;--blue:#65b8ff;--green:#63d6ae}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(ellipse at 70% -15%,#252044 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+    button,textarea{font:inherit} button{cursor:pointer}
+    .app{max-width:760px;margin:auto;padding:20px 16px 100px}
+    header{display:flex;align-items:center;justify-content:space-between;margin:4px 0 28px}
+    .brand{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#a18aff,#5869dc);display:grid;place-items:center;box-shadow:0 8px 28px #7b6bff44;font-size:21px}
+    .brand strong{display:block;letter-spacing:.13em;font-size:14px}.brand small{color:var(--muted);font-size:10px;letter-spacing:.18em}
+    .demo{border:1px solid #66552a;color:#e9c879;background:#302817;padding:6px 10px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.08em}
+    .eyebrow{color:var(--purple);text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.18em}
+    h1{font-size:clamp(30px,8vw,43px);line-height:1.08;letter-spacing:-.045em;margin:9px 0 10px}
+    .sub{color:var(--muted);margin:0 0 24px;max-width:550px}
+    .composer,.card{background:linear-gradient(150deg,#171927,#10121b);border:1px solid var(--line);border-radius:22px;padding:17px;box-shadow:0 16px 45px #0003}
+    textarea{width:100%;resize:vertical;min-height:104px;border:0;outline:0;color:var(--text);background:transparent;font-size:16px}
+    textarea::placeholder{color:#73798f}
+    .composer-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;flex-wrap:wrap}
+    .hint{color:var(--muted);font-size:11px}
+    .primary{border:0;border-radius:13px;padding:12px 17px;background:linear-gradient(110deg,#927bff,#6579ed);color:white;font-weight:750;box-shadow:0 7px 22px #7a6aff33}
+    .primary:disabled{opacity:.5;cursor:wait}
+    .section-head{display:flex;justify-content:space-between;align-items:center;margin:26px 2px 12px}
+    .section-head h2{font-size:14px;margin:0;letter-spacing:.02em}.muted{color:var(--muted)}
+    .models{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+    .model{display:flex;align-items:center;gap:10px;padding:12px;background:#11131d;border:1px solid var(--line);border-radius:15px}
+    .avatar{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;font-weight:800;font-size:12px;background:#25213c;color:#c6baff}
+    .model:nth-child(2) .avatar{background:#26332e;color:#9be3c4}.model:nth-child(3) .avatar{background:#1e3040;color:#9bd5ff}.model:nth-child(4) .avatar{background:#3a2c20;color:#f1c18a}
+    .model b{font-size:12px;display:block}.model small{color:var(--muted);font-size:10px}
+    .thread{display:grid;gap:12px;margin-top:14px}
+    .reply{background:#121521;border:1px solid var(--line);border-radius:17px;padding:14px}
+    .reply-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}.reply-top b{font-size:13px}.reply-top small{margin-left:auto;color:var(--muted);font-size:10px}
+    .reply p{margin:0;color:#d8dbea;font-size:13px}
+    .final{border-color:#6154a2;background:linear-gradient(140deg,#201d36,#121521)}
+    .final h3{margin:0 0 8px;font-size:14px}.final p{font-size:13px;color:#e2def8}
+    .nav{position:fixed;bottom:0;left:0;right:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#0c0d14eF;backdrop-filter:blur(18px);border-top:1px solid #242737;display:flex;justify-content:center;z-index:4}
+    .nav-inner{width:min(760px,100%);display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .nav button{border:0;background:transparent;color:var(--muted);padding:7px 4px;border-radius:12px;font-size:11px}.nav button span{display:block;font-size:18px;margin-bottom:2px}.nav button.active{color:#c7baff;background:#211e35}
+    .page{display:none}.page.active{display:block}
+    .history-item{padding:13px 0;border-bottom:1px solid var(--line)}.history-item:last-child{border:0}.history-item b{font-size:13px}.history-item small{display:block;color:var(--muted);margin-top:4px}
+    .empty{padding:25px 10px;text-align:center;color:var(--muted);font-size:13px}
+    .notice{margin-top:16px;color:#aeb2c4;font-size:11px;line-height:1.5}
+    .danger{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:10px;padding:8px 11px;font-size:11px}
+    @media(min-width:600px){.app{padding-top:32px}.models{grid-template-columns:repeat(4,1fr)}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><div class="logo">✦</div><div><strong>AI COUNCIL</strong><small>THINK TOGETHER</small></div></div>
+    <span class="demo">DEMO MODE</span>
+  </header>
+
+  <main>
+    <section id="home" class="page active">
+      <div class="eyebrow">Dit personlige AI-råd</div>
+      <h1>Ét spørgsmål.<br><span style="background:linear-gradient(90deg,#b8a9ff,#75c9ff);-webkit-background-clip:text;background-clip:text;color:transparent">Flere perspektiver.</span></h1>
+      <p class="sub">Lad forskellige AI-perspektiver udfordre hinanden og samle trådene i én konklusion.</p>
+      <div class="composer">
+        <textarea id="question" maxlength="1200" placeholder="Hvad vil du gerne have AI-rådet til at undersøge?"></textarea>
+        <div class="composer-foot"><span class="hint">4 AI-roller · 2 diskussionsrunder · 1 konklusion</span><button id="startBtn" class="primary">Start rådsmøde&nbsp; ↗</button></div>
+      </div>
+      <div class="section-head"><h2>Dit AI-panel</h2><span class="muted" style="font-size:11px">4 perspektiver</span></div>
+      <div class="models">
+        <div class="model"><div class="avatar">GPT</div><div><b>Strategen</b><small>ChatGPT · demo</small></div></div>
+        <div class="model"><div class="avatar">CL</div><div><b>Kritikeren</b><small>Claude · demo</small></div></div>
+        <div class="model"><div class="avatar">GE</div><div><b>Analytikeren</b><small>Gemini · demo</small></div></div>
+        <div class="model"><div class="avatar">DS</div><div><b>Idéudvikleren</b><small>DeepSeek · demo</small></div></div>
+      </div>
+      <p class="notice">Vigtigt: Dette er en interaktiv prototype. Svarene er demonstrationsindhold – der kaldes endnu ikke rigtige AI-modeller, og der opkræves ingen betaling.</p>
+    </section>
+
+    <section id="council" class="page">
+      <div class="eyebrow">Rådsmøde</div><h1 style="font-size:30px">AI-diskussion</h1>
+      <div class="card"><div class="muted" style="font-size:10px;text-transform:uppercase;letter-spacing:.14em">Dit spørgsmål</div><div id="activeQuestion" style="font-weight:650;margin-top:6px"></div></div>
+      <div class="section-head"><h2>Modellernes perspektiver</h2><span id="progress" class="muted" style="font-size:11px">Klar</span></div>
+      <div id="replies" class="thread"><div class="empty">Start et rådsmøde fra forsiden.</div></div>
+      <div style="display:flex;gap:8px;margin-top:14px"><button id="newBtn" class="danger">Nyt spørgsmål</button><button id="saveBtn" class="danger">Gem i historik</button></div>
+    </section>
+
+    <section id="history" class="page">
+      <div class="eyebrow">Dine tidligere møder</div><h1 style="font-size:30px">Historik</h1>
+      <div class="card" id="historyList"><div class="empty">Dine gemte rådsmøder vises her.</div></div>
+      <p class="notice">Historikken gemmes lokalt i denne browser på din telefon.</p>
+    </section>
+  </main>
+</div>
+<nav class="nav"><div class="nav-inner">
+  <button class="active" data-page="home"><span>⌂</span>Hjem</button>
+  <button data-page="council"><span>✧</span>AI Council</button>
+  <button data-page="history"><span>◷</span>Historik</button>
+</div></nav>
+<script>
+const $=s=>document.querySelector(s);
+const names=[["GPT","ChatGPT · Strategen"],["CL","Claude · Kritikeren"],["GE","Gemini · Analytikeren"],["DS","DeepSeek · Idéudvikleren"]];
+let current=null;
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));if(id==="history")renderHistory();}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+function makeReplies(q){
+ const short=q.length>90?q.slice(0,90)+"…":q;
+ return [
+  ["Strategen","Jeg vil starte med at definere det ønskede resultat og arbejde baglæns derfra. For '"+short+"' bør vi omsætte ambitionen til 2-3 konkrete mål og prioritere den handling, der giver mest læring først."],
+  ["Kritikeren","Det lyder lovende, men vi mangler stadig antagelser, begrænsninger og mulige risici. Hvad kan gå galt? Jeg vil teste idéen i lille skala, før der bruges mange ressourcer."],
+  ["Analytikeren","Jeg foreslår at sammenligne mulighederne efter effekt, indsats, tid og usikkerhed. Vælg målbare kriterier, så beslutningen ikke kun bygger på mavefornemmelse."],
+  ["Idéudvikleren","Vi kan kombinere de bedste dele: lav en enkel første test, indsamle feedback og forbedre løsningen i korte iterationer. Det skaber fremdrift uden at låse os fast."]
+ ];
+}
+function debate(q){
+ current={question:q,date:new Date().toISOString(),replies:makeReplies(q)};
+ $("#activeQuestion").textContent=q;$("#replies").innerHTML="";showPage("council");$("#progress").textContent="Modellerne tænker…";$("#startBtn").disabled=true;
+ const replies=$("#replies");
+ current.replies.forEach((r,i)=>setTimeout(()=>{
+  const el=document.createElement("article");el.className="reply";
+  const top=document.createElement("div");top.className="reply-top";
+  const av=document.createElement("div");av.className="avatar";av.textContent=names[i][0];
+  const nm=document.createElement("b");nm.textContent=names[i][1];
+  const tag=document.createElement("small");tag.textContent="Runde 1 · DEMO";
+  top.append(av,nm,tag);const p=document.createElement("p");p.textContent=r[1];el.append(top,p);replies.append(el);
+  if(i===3)setTimeout(addFinal,500);
+ },450+i*650));
+}
+function addFinal(){
+ const el=document.createElement("article");el.className="reply final";
+ const h=document.createElement("h3");h.textContent="✦ AI Council – samlet konklusion";
+ const p=document.createElement("p");p.textContent="De fire perspektiver peger på en fælles retning: Start med et klart mål, undersøg de vigtigste risici, og lav en lille målbar test, før du investerer tungt. Uenigheden handler især om tempo og prioritering. Anbefalet næste skridt: Beskriv én konkret antagelse, du kan teste inden for 7 dage, og fastlæg på forhånd, hvad der tæller som et godt resultat.";
+ const note=document.createElement("small");note.style.color="#b5a9ef";note.textContent="DOMMERENS OPSUMMERING · DEMO – ikke genereret af en live AI";
+ el.append(h,p,note);$("#replies").append(el);$("#progress").textContent="Rådsmøde afsluttet";$("#startBtn").disabled=false;
+}
+$("#startBtn").addEventListener("click",()=>{const q=$("#question").value.trim();if(!q){$("#question").focus();return;}debate(q);});
+$("#newBtn").addEventListener("click",()=>{showPage("home");$("#question").focus();});
+$("#saveBtn").addEventListener("click",()=>{if(!current)return;const h=JSON.parse(localStorage.getItem("aic-history")||"[]");h.unshift(current);localStorage.setItem("aic-history",JSON.stringify(h.slice(0,30)));$("#saveBtn").textContent="Gemt ✓";setTimeout(()=>$("#saveBtn").textContent="Gem i historik",1400);});
+function renderHistory(){const h=JSON.parse(localStorage.getItem("aic-history")||"[]"),box=$("#historyList");box.innerHTML="";if(!h.length){box.innerHTML='<div class="empty">Ingen gemte rådsmøder endnu.</div>';return;}h.forEach(item=>{const d=document.createElement("div");d.className="history-item";const b=document.createElement("b");b.textContent=item.question;const s=document.createElement("small");s.textContent=new Date(item.date).toLocaleString("da-DK");d.append(b,s);box.append(d);});}
+if("serviceWorker" in navigator && location.protocol!=="file:"){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}
+</script>
+</body></html>
